@@ -7,27 +7,30 @@
         crossorigin="anonymous"></script>
     </head>
     <body>
-        <select id="categories"></select>
-        <button onclick="filter()">Filter</button>
-        <div id="result"></div>
         <button onclick="loadProducts()">Load products</button>
+        <div id="result"></div>
+        <select name="categories" id="categories"></select>
+        <button onclick="filter()">Filter</button>
+        <div id="filtered_result"></div>
     </body>
     <script language="javascript">
 
         all_categories = [];
+        all_products = [];
 
         // Functions
         
         function loadProducts() {
             $.get( "https://kyramccand.github.io/assignment-5/products.json", 
 			function(data) {
-				str = JSON.stringify(data);
-				// document.getElementById('result').innerHTML = str;
+
+                // Store data in global variable for later access
+                all_products = data;
+
 				data.forEach(function(product) {
                     
                     // Get all the categories
                     categories = product.Category.map(function(category) {
-                        console.log(category);
                         if (all_categories.indexOf(category) == -1) {
                             all_categories.push(category);
                         }
@@ -42,18 +45,29 @@
                             "<li>Categories: " + categories + "</li>" +
                         "</ul>";
                 });
+
+                // Populate the options
+                all_categories.forEach(function(category) {
+                    document.getElementById("categories").innerHTML += "<option value=" + category + ">" + category + "</option>";
+                })
             })
 
-            // Populate the options
-            all_categories.forEach(function(category) {
-                console.log(category);
-                document.getElementById("categories").innerHTML += "<option>" + category + "</option>";
-            })
+            
         }
 
         function filter() {
-
-        }
-
+            // Find the selected category
+            selected_category = document.getElementById("categories").value;
+            // Clear the previous result
+            document.getElementById("filtered_result").innerHTML = "";
+            // Add the new result
+            all_products.forEach(function(product) {
+                // Check that the product is in that category
+                if (product.Category.indexOf(selected_category) != -1) {
+                    // Display info if so
+                    document.getElementById("filtered_result").innerHTML += "<h2>" + product.Name + "</h2>";
+                    }
+                });
+            }
     </script>
 </html>
