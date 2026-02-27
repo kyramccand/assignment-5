@@ -15,7 +15,9 @@
     </body>
     <script language="javascript">
 
+        // To store all the categories for select
         all_categories = [];
+        // To store all the products for filter
         all_products = [];
 
         // Functions
@@ -23,37 +25,31 @@
         function loadProducts() {
             $.get( "https://kyramccand.github.io/assignment-5/products.json", 
 			function(data) {
-
                 // Store data in global variable for later access
                 all_products = data;
-
+                // Read every product
 				data.forEach(function(product) {
-                    
-                    // Get all the categories
+                    // Get all the categories and format them with commas in between
                     categories = product.Category.map(function(category) {
                         if (all_categories.indexOf(category) == -1) {
                             all_categories.push(category);
                         }
                         return category;
                     }).join(", ");
-
-                    // Display info
+                    // Display info in list format
                     document.getElementById('result').innerHTML += "<h2>" + product.Name + "</h2>" +
                         "<ul>" +
                             "<li>Description: " + product.Description + "</li>" +
                             "<li>Price: $" + product.Price + "/hr</li>" +
                             "<li>Categories: " + categories + "</li>" +
                         "</ul>";
-                });
-
-                // Populate the options
+                }); // End of forEach loop
+                // Populate the select category options
                 all_categories.forEach(function(category) {
                     document.getElementById("categories").innerHTML += "<option value=" + category + ">" + category + "</option>";
-                })
+                }) // End of get
             })
-
-            
-        }
+        } // End of load products function
 
         function filter() {
             // Find the selected category
@@ -67,7 +63,7 @@
                     // Display info if so
                     document.getElementById("filtered_result").innerHTML += "<h2>" + product.Name + "</h2>";
                     }
-                });
-            }
+            }); // End of forEach loop
+        } // End of filter function
     </script>
 </html>

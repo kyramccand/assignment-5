@@ -6,11 +6,16 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+        <!-- Contains all the page information -->
         <div class="page-container">
+            <!-- Page title -->
             <h1>Joke Generator</h1>
+            <!-- Split the page in two -->
             <div class="split-page">
+                <!-- Left side of the page -->
                 <div class="left-side">
                     <div class="form-container">
+                        <!-- Form for type, number of joke -->
                         <h3>Generage Jokes</h3>
                         <form>
                             <label for="joke-types">Type of joke</label><select id="joke-types" name="joke-types"></select>
@@ -20,11 +25,15 @@
                                 <option value="ten">Up to 10</option>
                             </select>
                         </form>
+                        <!-- Load jokes upon button click -->
                         <button onclick="loadJokes()">Generate</button>
                         </div>
+                    <!-- Div to store the result when it is loaded -->
                     <div id="result"></div>
                 </div>
-                    <div class="my-api-container">
+                <!-- Contains the info on My API -->
+                <div class="my-api-container">
+                    <!-- Answers to questions -->
                     <h2>My API</h2>
                     <h3>What it is</h3>
                     The Official Joke API responds with jokes in a JSON format.
@@ -35,6 +44,7 @@
                     I selected it because one of the joke types is programming! Also, I feel like
                     my joke knowledge is below average, so I was hoping to learn some new ones.
                     <h3>Where I found it</h3>
+                    <!-- Link all the sources -->
                     <p>
                         I found
                         <a target="_blank" href="https://github.com/15Dkatz/official_joke_api"> this API</a>
@@ -57,41 +67,51 @@
                     website (they would replace these jokes with their own), or on a programming
                     website to get kids more interested in learning.
                 </div>
+                <!-- End of My API container -->
             </div>
+            <!-- End of split pages -->
         </div>
+        <!-- End of page container -->
     </body>
     <script>
-
+        // Populate the joke type options
         loadJokeTypes();
 
+        // Functions
+
         function loadJokeTypes() {
+            // Fetch the joke type json
             fetch("https://official-joke-api.appspot.com/types")
             .then (res => res.text())
             .then (response => {
+                // Parse the JSON
                 data = JSON.parse(response);
+                // Add the options
                 document.getElementById("joke-types").innerHTML = data.map((type) => {
                     return "<option value='" + type + "'>" + type + "</option>"
                 }).join("");
             })
+            // Catch any errors
             .catch (error => consol.log(error));
-        }
+        } // End of loadJokeTypes function
 
         function loadJokes() {
-
             // Reset the joke
             document.getElementById("result").innerHTML = "";
-
-            // Get a new joke
+            // Get new joke(s)
             fetch("https://official-joke-api.appspot.com/jokes/" + document.getElementById("joke-types").value + "/" + document.getElementById("joke-count").value)
             .then (res => res.text())
             .then (response => {
+                // Parse the JSON
                 data = JSON.parse(response);
-                console.log(data);
+                // Add each joke to the display
                 data.forEach(function(joke) {
                     document.getElementById("result").innerHTML += "<h3>" + joke.setup + "</h3><p>" + joke.punchline + "</p>";
                 })
             })
+            // Catch any errors
             .catch (error => consol.log(error));
-        }
+        } // End of loadJokes function
+        
     </script>
 </html>

@@ -2,32 +2,34 @@
     <head>
         <meta charset="utf-8">
         <title>Part 1: Products 2</title>
+        <!-- For loading the products -->
         <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   
         crossorigin="anonymous"></script>
     </head>
     <body>
+        <!-- The div to display the loaded products -->
         <div id="result"></div>
+        <!-- The button to load the products, which calls the loadProducts() function -->
         <button onclick="loadProducts()">Load products</button>
-
     </body>
-    <script language="javascript">
-        function loadProducts() {
 
+    <script language="javascript">
+
+        // Functions
+
+        function loadProducts() {
             // Clear HTML
             document.getElementById('result').innerHTML = "";
             $.get( "https://kyramccand.github.io/assignment-5/products.json", 
 			function(data) {
-				str = JSON.stringify(data);
-				// document.getElementById('result').innerHTML = str;
+				// Read each product
 				data.forEach(function(product) {
-                    
-                    // Get categories
+                    // Get categories and format them with commas in between
                     categories = product.Category.map(function(category) {
                         return category;
                     }).join(", ");
-
-                    // Display info
+                    // Display info in list format
                     document.getElementById('result').innerHTML += "<h2>" + product.Name + "</h2>" +
                         "<ul>" +
                             "<li>Description: " + product.Description + "</li>" +
