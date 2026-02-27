@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>
+            Part 2: API
+        </title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="page-container">
+            <h1>Joke Generator</h1>
+            <div class="split-page">
+                <div class="left-side">
+                    <div class="form-container">
+                        <h3>Generage Jokes</h3>
+                        <form>
+                            <label for="joke-types">Type of joke</label><select id="joke-types" name="joke-types"></select>
+                            <label for="joke-count">Number of jokes</label>
+                            <select type="number" id="joke-count" name="joke-count">
+                                <option value="random">One</option>
+                                <option value="ten">Up to 10</option>
+                            </select>
+                        </form>
+                        <button onclick="loadJokes()">Generate</button>
+                        </div>
+                    <div id="result"></div>
+                </div>
+                    <div class="my-api-container">
+                    <h2>My API</h2>
+                    <h3>What it is</h3>
+                    The Official Joke API responds with jokes in a JSON format.
+                    Each joke has 4 members: a setup, a punchline, a type, and an ID.
+                    You can request random jokes, jokes by type, or a specific number at once
+                    (but it seems like there are only 5 knock-knock jokes and 2 dad jokes).
+                    <h3>Why I selected it</h3>
+                    I selected it because one of the joke types is programming! Also, I feel like
+                    my joke knowledge is below average, so I was hoping to learn some new ones.
+                    <h3>Where I found it</h3>
+                    <p>
+                        I found
+                        <a target="_blank" href="https://github.com/15Dkatz/official_joke_api"> this API</a>
+                        on
+                        <a target="_blank" href="https://apipheny.io/free-api/">Free APIs</a>, which was a google search result for
+                        <a target="_blank" href="https://www.google.com/search?q=free+api+that+returns+json&sca_esv=a034994e941f7d25&rlz=1C5CHFA_enUS967US982&sxsrf=ANbL-n570CLhix-qKtPki1oI-fCpEMySdQ%3A1772163095002&ei=FhChaZvxPPel5NoP_YftyAw&biw=1920&bih=992&oq=free+apis+that+return+&gs_lp=Egxnd3Mtd2l6LXNlcnAiFmZyZWUgYXBpcyB0aGF0IHJldHVybiAqAggAMgYQABgWGB4yCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBTILEAAYgAQYhgMYigUyCxAAGIAEGIYDGIoFMgUQABjvBTIFEAAY7wUyBRAAGO8FMgUQABjvBTIFEAAY7wVItBFQ5QFYxApwAXgBkAEAmAFpoAGoCKoBBDEyLjG4AQHIAQD4AQGYAg6gAtIIwgIKEAAYsAMY1gQYR8ICDRAAGIAEGLADGEMYigXCAgsQABiABBiRAhiKBcICBRAAGIAEwgIIEAAYgAQYogTCAgUQIRigAcICBRAhGKsCmAMAiAYBkAYKkgcEMTMuMaAH5EyyBwQxMi4xuAfOCMIHBjAuMTEuM8gHHoAIAA&sclient=gws-wiz-serp">
+                        this search</a>.
+                    </p>
+                    <h3>How I used it</h3>
+                    I used it to build a joke generator that lets the user pick a joke category
+                    from a select and the number of jokes they want from another select, and then
+                    fetches a random joke from that category. The setup is displayed as a h3
+                    and the punchline as a p below it. In order to do this, I needed to provide the
+                    joke type (I populated the select with the choices after loading the joke types)
+                    and the number of jokes (either "random" for 1 or "ten" for up to ten). The API
+                    had a separate option to fetch only the joke types using the "types" parameter,
+                    which is what I used to populate the select options.
+                    <h3>Where it would be helpful</h3>
+                    This would be useful as a chatbot that tells jokes, for display on a comedian's
+                    website (they would replace these jokes with their own), or on a programming
+                    website to get kids more interested in learning.
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+
+        loadJokeTypes();
+
+        function loadJokeTypes() {
+            fetch("https://official-joke-api.appspot.com/types")
+            .then (res => res.text())
+            .then (response => {
+                data = JSON.parse(response);
+                document.getElementById("joke-types").innerHTML = data.map((type) => {
+                    return "<option value='" + type + "'>" + type + "</option>"
+                }).join("");
+            })
+            .catch (error => consol.log(error));
+        }
+
+        function loadJokes() {
+
+            // Reset the joke
+            document.getElementById("result").innerHTML = "";
+
+            // Get a new joke
+            fetch("https://official-joke-api.appspot.com/jokes/" + document.getElementById("joke-types").value + "/" + document.getElementById("joke-count").value)
+            .then (res => res.text())
+            .then (response => {
+                data = JSON.parse(response);
+                console.log(data);
+                data.forEach(function(joke) {
+                    document.getElementById("result").innerHTML += "<h3>" + joke.setup + "</h3><p>" + joke.punchline + "</p>";
+                })
+            })
+            .catch (error => consol.log(error));
+        }
+    </script>
+</html>
