@@ -1,17 +1,23 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Products 2</title>
+        <title>Products 3</title>
         <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   
         crossorigin="anonymous"></script>
     </head>
     <body>
+        <select id="categories"></select>
+        <button onclick="filter()">Filter</button>
         <div id="result"></div>
         <button onclick="loadProducts()">Load products</button>
-
     </body>
     <script language="javascript">
+
+        all_categories = [];
+
+        // Functions
+        
         function loadProducts() {
             $.get( "https://kyramccand.github.io/assignment-5/products.json", 
 			function(data) {
@@ -19,8 +25,12 @@
 				// document.getElementById('result').innerHTML = str;
 				data.forEach(function(product) {
                     
-                    // Get categories
+                    // Get all the categories
                     categories = product.Category.map(function(category) {
+                        console.log(category);
+                        if (all_categories.indexOf(category) == -1) {
+                            all_categories.push(category);
+                        }
                         return category;
                     }).join(", ");
 
@@ -33,6 +43,17 @@
                         "</ul>";
                 });
             })
+
+            // Populate the options
+            all_categories.forEach(function(category) {
+                console.log(category);
+                document.getElementById("categories").innerHTML += "<option>" + category + "</option>";
+            })
         }
+
+        function filter() {
+
+        }
+
     </script>
 </html>
