@@ -13,6 +13,9 @@
     </body>
     <script language="javascript">
         function loadProducts() {
+
+            // Clear HTML
+            document.getElementById('result').innerHTML = "";
             $.get( "https://kyramccand.github.io/assignment-5/products.json", 
 			function(data) {
 				str = JSON.stringify(data);
